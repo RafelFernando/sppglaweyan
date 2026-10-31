@@ -10,9 +10,12 @@ export default async function KategoriProdukPage({
 }: {
     searchParams: Promise<{ query?: string; page?: string }>;
 }) {
-    const query = (await searchParams)?.query || "";
-    const currentPage = Number((await searchParams)?.page) || 1;
+    const params = await searchParams;
+
+    const query = params?.query || "";
+    const currentPage = Number(params?.page) || 1;
     const totalPages = await getBarangPages(query);
+
     return (
         <main className="max-w-7xl px-4 py-16 mt-10 mx-auto">
             <div className="flex flex-row justify-between items-center gap-6">
@@ -26,8 +29,14 @@ export default async function KategoriProdukPage({
                 <FormTambahBarang />
             </div>
 
-            <Suspense key={query + currentPage} fallback={<div>Loading data...</div>}>
-                <TabelBarang query={query} currentPage={currentPage} />
+            <Suspense
+                key={query + currentPage}
+                fallback={<div>Loading data...</div>}
+            >
+                <TabelBarang
+                    query={query}
+                    currentPage={currentPage}
+                />
             </Suspense>
 
             <div className="flex justify-center mt-4">
