@@ -15,7 +15,7 @@ async function HomeContent(): Promise<ReactNode> {
   const session = await auth();
 
   if (!session) {
-    redirect("/login");
+    redirect("/signin");
   }
 
   switch (session.user.role) {
