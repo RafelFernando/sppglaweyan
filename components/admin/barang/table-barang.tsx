@@ -9,7 +9,7 @@ import {
 
 import { getBarang } from "@/lib/admin/barang/data";
 import { ButtonDeleteBarang, ButtonEditBarang } from "./button";
-// import { FormEditKategoriProduk } from "./form-edit-kategori-produk";
+import { FormEditBarang } from "./form-edit-barang";
 
 export default async function TabelBarang({ query, currentPage }: { query: string, currentPage: number }) {
     const barang = await getBarang(query, currentPage);
@@ -37,7 +37,7 @@ export default async function TabelBarang({ query, currentPage }: { query: strin
                         <TableCell>{barang.namaBarang}</TableCell>
                         <TableCell>{barang.satuan}</TableCell>
                         <TableCell>
-                            {barang.isActive ? (
+                            {barang.isActive == "true" ? (
                                 <span className="px-3 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">
                                     Aktif
                                 </span>
@@ -48,8 +48,8 @@ export default async function TabelBarang({ query, currentPage }: { query: strin
                             )}
                         </TableCell>
                         <TableCell className="flex justify-end">
-                            {/* <FormEditKategoriProduk key={kategori.id} kategoriProduks={kategori} />
-                            <DeleteButtonKategoriProduk key={kategori.id} id={kategori.id} /> */}
+                            <FormEditBarang key={barang.id} Barangs={barang} />
+                            <ButtonDeleteBarang key={barang.id} id={barang.id} />
                         </TableCell>
                     </TableRow>
                 ))}
