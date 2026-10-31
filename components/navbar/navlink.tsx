@@ -40,15 +40,15 @@ export default function Navlink() {
                         </>
                     )}
 
-                    {/* {session ? (
+                    {session ? (
                         <li className="pt-2 md:pt-0">
                             <button onClick={() => signOut()} className="md:hidden py-2.5 px-4 bg-red-400 text-white hover:bg-red-600 rounded-sm cursor-pointer">Sign Out</button>
                         </li>
                     ) : (
                         <li className="pt-2 md:pt-0">
-                            <Link href="/signin" className="py-2.5 px-6 bg-red-400 text-white hover:bg-red-600 rounded-sm cursor-pointer">Sign In</Link>
+                            <Link href="/signin" className="py-2.5 px-6 bg-white text-black hover:bg-gray-200 rounded-sm cursor-pointer">Sign In</Link>
                         </li>
-                    )} */}
+                    )}
                 </ul>
             </div>
         </>

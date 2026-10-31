@@ -1,16 +1,7 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { Suspense } from "react";
 
-export default function Home() {
-  return (
-    <Suspense fallback={<p>Memeriksa sesi pengguna...</p>}>
-      <AuthRedirect />
-    </Suspense>
-  );
-}
-
-async function AuthRedirect() {
+export default async function Home() {
   const session = await auth();
 
   if (!session) {
@@ -21,9 +12,16 @@ async function AuthRedirect() {
     case "admin":
       redirect("/admin/dashboard");
 
+    case "eksekutif":
+      redirect("/eksekutif/dashboard");
+
     default:
-      redirect("/signin");
+      redirect("/login");
   }
 
-  return null;
+  return (
+    <div>
+      <p>Selamat Datang</p>
+    </div>
+  );
 }
