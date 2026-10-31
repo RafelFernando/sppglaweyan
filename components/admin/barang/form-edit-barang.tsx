@@ -14,9 +14,9 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ButtonEditBarang, ButtonSimpanBarang } from "./button";
+import { ButtonSimpanBarang } from "./button";
 import { updateBarang } from "@/lib/admin/barang/action"
-import { useState, useActionState, useEffect } from "react";
+import { useActionState, useEffect } from "react";
 import { IoPencil } from "react-icons/io5";
 import { Barang } from "@/lib/generated/prisma/client";
 import { toast } from "@/components/ui/toast";
@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/select"
 
 export function FormEditBarang({ Barangs }: { Barangs: Barang }) {
-    const [state, formAction, isPending] = useActionState(
+    const [state, formAction] = useActionState(
         updateBarang.bind(null, Barangs.id),
         null
     );

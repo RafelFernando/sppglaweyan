@@ -5,19 +5,14 @@ import { getBarangPages } from "@/lib/admin/barang/data";
 import Pagination from "@/components/pagination";
 import Search from "@/components/search";
 
-export default async function KategoriProdukPage({
-    searchParams,
-}: {
+type BarangPageProps = {
     searchParams: Promise<{
         query?: string;
         page?: string;
     }>;
-}) {
-    const params = await searchParams;
+};
 
-    const query = params?.query || "";
-    const currentPage = Number(params?.page) || 1;
-
+export default function BarangPage({ searchParams }: BarangPageProps) {
     return (
         <main className="max-w-7xl px-4 py-16 mt-10 mx-auto">
             <div className="flex flex-row justify-between items-center gap-6">
@@ -26,6 +21,21 @@ export default async function KategoriProdukPage({
                 </h1>
             </div>
 
+            <Suspense fallback={<div>Loading halaman barang...</div>}>
+                <BarangContent searchParams={searchParams} />
+            </Suspense>
+        </main>
+    );
+}
+
+async function BarangContent({ searchParams }: BarangPageProps) {
+    const params = await searchParams;
+
+    const query = params.query || "";
+    const currentPage = Number(params.page) || 1;
+
+    return (
+        <>
             <div className="flex items-center justify-between gap-1 mb-5">
                 <Suspense fallback={<p>Loading...</p>}>
                     <Search />
@@ -49,15 +59,11 @@ export default async function KategoriProdukPage({
                     <PaginationWrapper query={query} />
                 </Suspense>
             </div>
-        </main>
+        </>
     );
 }
 
-async function PaginationWrapper({
-    query,
-}: {
-    query: string;
-}) {
+async function PaginationWrapper({ query }: { query: string }) {
     const totalPages = await getBarangPages(query);
 
     return <Pagination totalPages={totalPages} />;

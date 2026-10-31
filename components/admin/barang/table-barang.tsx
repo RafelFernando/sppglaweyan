@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/table";
 
 import { getBarang } from "@/lib/admin/barang/data";
-import { ButtonDeleteBarang, ButtonEditBarang } from "./button";
+import { ButtonDeleteBarang } from "./button";
 import { FormEditBarang } from "./form-edit-barang";
 
 export default async function TabelBarang({ query, currentPage }: { query: string, currentPage: number }) {
