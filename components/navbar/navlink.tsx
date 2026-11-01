@@ -37,6 +37,7 @@ export default function Navlink() {
                         <>
                             <li><Link href="/admin/dashboard" className="block py-2 px-3 text-white hover:bg-gray-100 rounded-sm md:hover:bg-transparent md:p-0">Dashboard</Link></li>
                             <li><Link href="/admin/barang" className="block py-2 px-3 text-white hover:bg-gray-100 rounded-sm md:hover:bg-transparent md:p-0">Barang</Link></li>
+                            <li><Link href="/admin/saldo-awal-barang" className="block py-2 px-3 text-white hover:bg-gray-100 rounded-sm md:hover:bg-transparent md:p-0">Saldo Awal Barang</Link></li>
                         </>
                     )}
 

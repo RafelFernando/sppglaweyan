@@ -12,20 +12,130 @@ datasource db {
   provider = "postgresql"
 }
 
-// Users
+enum StatusLaporan {
+  DRAFT
+  FINAL
+}
+
 model User {
   id       String  @id @default(cuid())
   name     String?
   email    String? @unique
   password String?
   role     String  @default("user")
+
+  barangMasuk  BarangMasuk[]
+  barangKeluar BarangKeluar[]
 }
 
 model Barang {
   id         String   @id @default(cuid())
   namaBarang String
-  satuan     String?
+  satuan     String
   isActive   String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+  barangMasuk   BarangMasuk[]
+  barangKeluar  BarangKeluar[]
+  saldoAwal     SaldoAwalBarang?
+  detailLaporan DetailLaporanHarian[]
+
+  @@index([namaBarang])
+  @@index([isActive])
+}
+
+// Saldo awal untuk memulai sistem
+model SaldoAwalBarang {
+  id        String   @id @default(cuid())
+  barangId  String   @unique
+  tanggal   DateTime @db.Date
+  jumlah    Int
+  harga     Int
+  nilai     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  barang Barang @relation(fields: [barangId], references: [id])
+}
+
+// Transaksi barang masuk
+model BarangMasuk {
+  id       String @id @default(cuid())
+  barangId String
+  userId   String
+
+  tanggal    DateTime @db.Date
+  jumlah     Decimal  @db.Decimal(18, 3)
+  hargaBeli  Decimal  @db.Decimal(18, 2)
+  totalHarga Decimal  @db.Decimal(18, 2)
+
+  supplier   String?
+  keterangan String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  barang Barang @relation(fields: [barangId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@index([barangId, tanggal])
+  @@index([tanggal])
+}
+
+// Transaksi barang keluar
+model BarangKeluar {
+  id       String @id @default(cuid())
+  barangId String
+  userId   String
+
+  tanggal DateTime @db.Date
+  jumlah  Decimal  @db.Decimal(18, 3)
+
+  keterangan String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  barang Barang @relation(fields: [barangId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@index([barangId, tanggal])
+  @@index([tanggal])
+}
+
+// Header laporan
+model LaporanHarian {
+  id        String        @id @default(cuid())
+  tanggal   DateTime      @unique @db.Date
+  status    StatusLaporan @default(DRAFT)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  detail DetailLaporanHarian[]
+}
+
+// Snapshot laporan per barang
+model DetailLaporanHarian {
+  id        String @id @default(cuid())
+  laporanId String
+  barangId  String
+
+  saldoAwal  Decimal @db.Decimal(18, 3)
+  masuk      Decimal @default(0) @db.Decimal(18, 3)
+  keluar     Decimal @default(0) @db.Decimal(18, 3)
+  saldoAkhir Decimal @db.Decimal(18, 3)
+
+  // Harga rata-rata pembelian hari itu
+  hargaBeliRataRata Decimal? @db.Decimal(18, 2)
+
+  // Penilaian persediaan
+  nilaiAwal   Decimal @db.Decimal(18, 2)
+  nilaiMasuk  Decimal @default(0) @db.Decimal(18, 2)
+  nilaiKeluar Decimal @default(0) @db.Decimal(18, 2)
+  nilaiAkhir  Decimal @db.Decimal(18, 2)
+
+  laporan LaporanHarian @relation(fields: [laporanId], references: [id])
+  barang  Barang        @relation(fields: [barangId], references: [id])
+
+  @@unique([laporanId, barangId])
+  @@index([barangId])
 }
